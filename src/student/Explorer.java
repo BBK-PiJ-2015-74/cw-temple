@@ -2,6 +2,7 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import exploring.TempleExplorer;
 
 public class Explorer {
 
@@ -36,7 +37,9 @@ public class Explorer {
      * @param state the information available at the current state
      */
     public void explore(ExplorationState state) {
-        //TODO:
+    	
+        TempleExplorer laraCroft = new TempleExplorer(state);
+        laraCroft.claimTheOrb();
     }
 
     /**

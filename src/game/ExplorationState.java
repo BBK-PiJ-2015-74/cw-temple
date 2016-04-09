@@ -35,7 +35,7 @@ public interface ExplorationState {
     /**
      * Change your current location to the node specified by id.
      * You can move only to nodes adjacent to your current node.
-     * Throw an IllegalArgumentException if id is not a neihgbor of your current location.
+     * Throw an IllegalArgumentException if id is not a neighbour of your current location.
      */
      void moveTo(long id);
 }
