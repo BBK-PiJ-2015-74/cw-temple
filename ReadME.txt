@@ -42,6 +42,23 @@ java.lang.IllegalArgumentException: moveTo: Node must be adjacent to position
 
 Need to check this out before moving further!
 
+This exception happens when Lara meets a blind alley
+In this case, all the previous tiles have been visited, so the next node she can reach without being visited before is not adjacent
+
+Idea: Calculate the path length
+Set off a thread which calculates the path length to the Orb for each route
+If we hit a blind alley, catch the exception
+However, the only way we can calculate a path length is by exploring - the threads can't do this, only Lara can?
+
+Find the shortest route with multiple threads and then follow the one that's the shortest using moveTo
+
+Alternatively, we could retrace steps 
+
+
+Running this seed:
+Lara always runs the same way. But in some cases she has a non-deterministic choice of which nodes to choose from
+-s -9218123272869372841
+
 
 
 

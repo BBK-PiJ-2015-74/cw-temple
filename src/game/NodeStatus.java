@@ -10,7 +10,7 @@ public class NodeStatus implements Comparable<NodeStatus> {
     private final int distance;
 
     /**
-     * Constructor: an instnce with id nodeId and distance dist.
+     * Constructor: an instance with id nodeId and distance dist.
      */
     /* package */ NodeStatus(long nodeId, int dist) {
         id = nodeId;
@@ -34,7 +34,7 @@ public class NodeStatus implements Comparable<NodeStatus> {
 
     /**
      * Return a negative number, 0, or a positive number depending on
-     * whether this is closer to, at the same ditance, or farther from the Orb.
+     * whether this is closer to, at the same distance, or farther from the Orb.
      */
     @Override
     public int compareTo(NodeStatus other) {
@@ -42,7 +42,7 @@ public class NodeStatus implements Comparable<NodeStatus> {
     }
 
     /**
-     * Return true if ob is an instance of NodeStatus and has the same id as this one.
+     * Return true if orb is an instance of NodeStatus and has the same id as this one.
      */
     @Override
     public boolean equals(Object ob) {
