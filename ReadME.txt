@@ -59,7 +59,7 @@ Running this seed:
 Lara always runs the same way. But in some cases she has a non-deterministic choice of which nodes to choose from
 -s -9218123272869372841
 
-
+Seed : -4289361413204218885 - for some reason this stops when there is an unvisited tile next door
 
 
 
