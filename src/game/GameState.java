@@ -237,6 +237,7 @@ public class GameState implements ExplorationState, EscapeState {
     /**
      * Returns a collection of NodeStatus objects which contain the unique ID of the node
      * and the distance from that node to the target.
+     * @author lburge01 updated to use computeDistanceToTargetPythagorus
      */
     @Override
     public Collection<NodeStatus> getNeighbours() {
@@ -245,29 +246,68 @@ public class GameState implements ExplorationState, EscapeState {
         }
 
         Collection<NodeStatus> options = new ArrayList<>();
+        
+        // NB. Following code block updated to use computeDistanceToTargetPythagorus (int row, int col)
         for (Node n : position.getNeighbours()) {
-            int distance = computeDistanceToTarget(n.getTile().getRow(), n.getTile().getColumn());
-            options.add(new NodeStatus(n.getId(), distance));
+            int distance = computeDistanceToTargetPythagorus(n.getTile().getRow(), n.getTile().getColumn());
+            int distancerows = computeDistanceToTarget(n.getTile().getRow(), 0);
+            int distancecolumns = computeDistanceToTarget(0, n.getTile().getColumn());
+            options.add(new NodeStatus(n.getId(), distance, distancerows, distancecolumns));// was n.getId(), distance
         }
         return options;
     }
 
+    /**
+     * This is the method that was provided with the original code
+     */
     private int computeDistanceToTarget(int row, int col) {
         return Math.abs(row - exploreCavern.getTarget().getTile().getRow())
                 + Math.abs(col - exploreCavern.getTarget().getTile().getColumn());
     }
-
+  
+    /**
+     * @author lburge01
+     * @param row
+     * @param col
+     * @return distance to target based on Pythagorus, rather than a straight addition of rows and columns
+     */
+    private int computeDistanceToTargetPythagorus(int row, int col) {
+        return (int) (Math.pow(Math.pow(row - exploreCavern.getTarget().getTile().getRow(),2)
+                + Math.pow(col - exploreCavern.getTarget().getTile().getColumn(),2),0.5));
+    }
+    
+    /**
+     * @author lburge01
+     * @param row
+     * @return distance to target based simply on rows - doesn't provide a solution as Lara stops at the nearest row,
+     * but then doesn't make it to the Orb
+     */
+    private int computeDistanceToTargetRows(int row) {
+    	return Math.abs(row - exploreCavern.getTarget().getTile().getRow());
+    }
+    
+    /**
+     * @author lburge01
+     * @param col
+     * @return distance to target based simply on columns - doesn't provide a solution as Lara stops at the nearest column,
+     * but then doesn't make it to the Orb
+     */
+    private int computeDistanceToTargetColumns(int col) {
+    	return Math.abs(col - exploreCavern.getTarget().getTile().getColumn());
+    }
+    
     /**
      * Returns the distance from your current location to the target location on the map.
+     * Updated to use computeDistanceToTargetPythagorus(int row, int col) instead of simply computeDistanceToTarget(row, col). 
      */
     @Override
     public int getDistanceToTarget() {
         if (stage != Stage.EXPLORE) {
             throw new IllegalStateException("getDistanceToTarget() can only be called while exploring!");
         }
+        return computeDistanceToTargetPythagorus(position.getTile().getRow(), position.getTile().getColumn());
+    } 
 
-        return computeDistanceToTarget(position.getTile().getRow(), position.getTile().getColumn());
-    }
 
     @Override
     public Node getCurrentNode() {

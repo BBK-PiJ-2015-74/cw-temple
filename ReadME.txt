@@ -26,7 +26,7 @@ in student.Explorer
 exloring.TempleExplorer contains the code necessary to help George Osborne claim the Orb.
 However, Lara Croft is better looking, and female, so in the interests of female solidarity I've renamed him.
 
-I've done a basic implementation which causes a runtime error as follows:
+The first basic implementation I tried caused a runtime error as follows:
 
 Your code caused an error  during the explore phase. Please see console output.
 We will move on to the escape phase anyway, but your solution is not correct!
@@ -40,27 +40,39 @@ java.lang.IllegalArgumentException: moveTo: Node must be adjacent to position
 	at game.GameState.runNewGame(GameState.java:108)
 	at main.GUImain.main(GUImain.java:15)
 
-Need to check this out before moving further!
+This exception occurred when Lara meets a blind alley
+In this case, all the previous tiles have been visited, so the next node she can reach which has not been visited causes an IllegalStateException
+from the moveTo(long id) method in the Explore phase. 
 
-This exception happens when Lara meets a blind alley
-In this case, all the previous tiles have been visited, so the next node she can reach without being visited before is not adjacent
+So when I hit a blind alley (i.e. all neighbouring tiles have been previously visited) I set up a retraceStep() method.
 
-Idea: Calculate the path length
-Set off a thread which calculates the path length to the Orb for each route
-If we hit a blind alley, catch the exception
-However, the only way we can calculate a path length is by exploring - the threads can't do this, only Lara can?
+Test seed for this part of the code was: -s -4289361413204218885
+										 -s -9218123272869372841 
 
-Find the shortest route with multiple threads and then follow the one that's the shortest using moveTo
+The path is recorded using recordPath() which puts the tile Ids on a stack, and then unstacks them when the step is re-traced.
 
-Alternatively, we could retrace steps 
+Concurrency: Not sure how to get this working concurrently, since this would involve spawning multiple Laras, but she can only
+moveTo() an adjacent tile ...
 
+*******Problematic seeds in the Explore phase**********************************
 
-Running this seed:
-Lara always runs the same way. But in some cases she has a non-deterministic choice of which nodes to choose from
--s -9218123272869372841
+It looks like, in some cases, Lara has a non-deterministic choice of which unvisited tiles to choose from.
+It looks non-deterministic, but she always chooses the one with the shortest path to the Orb, based on
+getDistanceToTarget() (@see GameState#getDistanceToTarget()) and
+Collection<NodeStatus> getNeighbours() (@see GameState#getNeighbours())
 
-Seed : -4289361413204218885 - for some reason this stops when there is an unvisited tile next door
+Playing around with this to optimise it:
+Using Pythagorus to calculate the distance to the target really improves the speed of claiming the Orb,
+demonstrated using the following problematic seed:
+-s -242848591514604047 
 
+For this, I had to amend the following:
+NodeStatus constructor (to allow amending rows and columns independently) -
+This didn't work, because calculating the distance to the Orb using only rows or columns independently,
+only gets Lara to the correct row or column, respectively.
 
+Can delete the addition of distancerows and distancecolumns to the NodeStatus constructor, as this dooesn't add anything.
+
+***************************************************************************************
 
 	

@@ -57,9 +57,9 @@ public class TempleExplorer {
 			
 			NodeStatus neighbourTilesNotVisited = findNeighbourTilesNotVisited(neighbours, tilesVisited);
 			//System.out.println("Entering if statement");
-			//neighbourTilesNotVisited is null if all neighbouring tiles to the current location have been visited
+			//neighbourTilesNotVisited == null if all neighbouring tiles to the current location have been visited
 			
-			if (neighbourTilesNotVisited != null && neighbourTilesNotVisited.getDistanceToTarget() < distance) { 
+			if (neighbourTilesNotVisited != null && neighbourTilesNotVisited.getDistanceToTarget() < distance) {
 			// finds the neighbourTileNotVisited which is closest to the Orb based on the grid
 			// works on grid not graph: could be optimised
 				distance = neighbourTilesNotVisited.getDistanceToTarget();
@@ -78,7 +78,7 @@ public class TempleExplorer {
 	}
 	
 	/**
-	 * A private method to return the NodeStatus the current tile, and find the tile in the set of neighbours which has not been visited closest to the Orb
+	 * A private method to return the NodeStatus of the current tile, and find the tile in the set of neighbours which has not been visited closest to the Orb
 	 * @param neighbours, the neighbouring tiles to the current location
 	 * @param tileVisited, the set of tiles which have been visited by Lara so far
 	 * @return NodeStatus of the tile which is in the set of neighbours and has not been visited before
@@ -86,13 +86,13 @@ public class TempleExplorer {
 	private NodeStatus findNeighbourTilesNotVisited(Collection<NodeStatus> neighbours, Set<Long> tileVisited) {
 		//System.out.println("calling findNeighbourTilesNotVisited sorted by NodeStatus");
 		NodeStatus tileNotVisited = neighbours.stream()
-            .sorted(NodeStatus::compareTo) 
+            .sorted(NodeStatus::compareTo) // uses compareTo method in NodeStatus class
             .filter(n -> !tileVisited.contains(n.getId()))
-            .findFirst().orElse(null);
+            .findAny().orElse(null); //findFirst() or findAny() doesn't make any difference
 		if (tileNotVisited == null) { // all neighbouring tiles have already been visited
 			System.out.println("Blind alley has been found");
 		}
-		return tileNotVisited;
+		return tileNotVisited; 
 	}
 	
 	/**
