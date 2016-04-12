@@ -18,16 +18,17 @@ import game.NodeStatus;
 
 public class TempleExplorer {
 	
-	private ExplorationState state;
-	private int pathLength;
+	private ExplorationState currentState;
+	private int pathlength;
 	private static final int MAX_DISTANCE = 1000000;
 	private Set<Long> tilesVisited;
-	private Stack<Long> path;
+	private Stack<Long> pathStack;
+	private Boolean blindAlleyFound;
 
 	public TempleExplorer(ExplorationState state) {
-		this.state = state;
+		this.currentState = state;
 		tilesVisited = new HashSet<>(); 
-		path = new Stack<>();
+		pathStack = new Stack<>();
 	}
 	
 	/**
@@ -43,56 +44,65 @@ public class TempleExplorer {
 	 */
 	public void claimTheOrb() {
 		
-		pathLength = 0;
-		long firstTileVisited = state.getCurrentLocation();
-		boolean blindAlleyFound = false;
+		pathlength = 0;
+		long firstTileVisited = currentState.getCurrentLocation();
+		blindAlleyFound = false;
 		System.out.println("The first tile visited was " + firstTileVisited);
+		recordPath();
 		
-		while ((state.getDistanceToTarget() != 0) && (blindAlleyFound == false)) {
+		while (currentState.getDistanceToTarget() != 0) { //deleted && blindAlleyFound == false
 			
-			Collection<NodeStatus> neighbours = state.getNeighbours();
-			tilesVisited.add(state.getCurrentLocation());
-			recordPath();
+			System.out.println("Back to beginning of while loop");
+			Collection<NodeStatus> neighbours = currentState.getNeighbours();
+			tilesVisited.add(currentState.getCurrentLocation());
+			//recordPath();
 			int distance = MAX_DISTANCE;
 			long nextTile = -1L;
 			
-			NodeStatus nearestNode = getNearestNeighbour(neighbours, tilesVisited); 	
-			if (nearestNode != null && nearestNode.getDistanceToTarget() < distance) { 
-					distance = nearestNode.getDistanceToTarget();
-					nextTile = nearestNode.getId();
+			NodeStatus tileNotVisitedClosestToOrb = getNearestNeighbour(neighbours, tilesVisited);
+			System.out.println("Entering if statement");
+			//Finds the tile which has not been visited with the shortest path to the Orb
+			// returns the NodeStatus of the tile, or else null
+			// if null, sets blindAlleyFound to true
+			
+			if (tileNotVisitedClosestToOrb != null && tileNotVisitedClosestToOrb.getDistanceToTarget() < distance) { 
+					distance = tileNotVisitedClosestToOrb.getDistanceToTarget();
+					nextTile = tileNotVisitedClosestToOrb.getId();
+					System.out.println("Moving to tile with id: " + nextTile); 
+					System.out.println("Moving from current position: " + currentState.getCurrentLocation());
+					currentState.moveTo(nextTile); //move to the adjacent tile which has not been visited
+					recordPath();
+					System.out.println("\t to new position: " + currentState.getCurrentLocation());
+					pathlength++;
+					System.out.println("Number of steps taken is " + pathlength);
+			//} else if (tileNotVisitedClosestToOrb != null){
+			//	retraceStep();
+			} else {
+				retraceStep();
 			}
 			
-			try {
-				System.out.println("Moving to tile with id: " + nextTile); 
-				System.out.println("Moving from current position: " + state.getCurrentLocation());
-				state.moveTo(nextTile); //move to the adjacent tile which has not been visited
-				System.out.println("\t to new position: " + state.getCurrentLocation());
-				pathLength++;
-				System.out.println("Number of steps taken is " + pathLength);
-			} catch (IllegalArgumentException ex) {
-				blindAlleyFound = true;
-				System.out.println("Lara has reached the end of a blind alley");
-				System.out.println("Number of steps taken was " + pathLength);
-				if (blindAlleyFound) {
-					retraceStep();
-					// look around again and see if any tiles are unvisited. If they are, carry on
-					blindAlleyFound = false;
-				}
-			}	
-		}	
-	}
+			
+		}// end of while loop
+		
+	} // end of method claimTheOrb
 	
 	/**
 	 * A private method to return the NodeStatus of the nearest non-visited neighbour
 	 * @param neighbours
 	 * @param tileVisited
-	 * @return NodeStatus of the tile which is in the set of neighbours, and is nearest to the Orb
+	 * @return NodeStatus of the tile which is in the set of neighbours, is nearest to the Orb, and has not been visited before
 	 */
 	private NodeStatus getNearestNeighbour(Collection<NodeStatus> neighbours, Set<Long> tileVisited) {
-		return neighbours.stream()
+		System.out.println("Calling getNearestNeighbour");
+		NodeStatus tileNotVisited = neighbours.stream()
             .sorted(NodeStatus::compareTo) 
             .filter(n -> !tileVisited.contains(n.getId()))
             .findFirst().orElse(null);
+		if (tileNotVisited == null) { // tile has already been visited
+			System.out.println("Blind alley has been found");
+			blindAlleyFound = true;
+		}
+		return tileNotVisited;
 	}
 	
 	/**
@@ -101,29 +111,23 @@ public class TempleExplorer {
 	 * @return path, a stack of all tiles visited during the current exploration.
 	 */
 	private Stack<Long> recordPath() {
-		long currentTileId = state.getCurrentLocation(); 
-		path.push(currentTileId);
-		return path;
+		pathStack.push(currentState.getCurrentLocation());
+		System.out.println("Recording path: location "+ pathStack.peek());
+		return pathStack;
 	}
 	
 	/**
 	 * A private method to retrace the steps travelled by Lara when she has hit a blind alley.
 	 */
 	private void retraceStep() {
-		path.pop();
-		state.moveTo(path.peek());
+		System.out.println("Calling retraceStep() method");
+		System.out.println("The current location is " + currentState.getCurrentLocation());
+		pathStack.pop();
+		System.out.println("The current location is " + currentState.getCurrentLocation());
+		System.out.println("The next location is " + pathStack.peek());
+		currentState.moveTo(pathStack.peek());	
+		blindAlleyFound = false;
+		pathlength++;
 	}
-	
-	// now iterate over this collection instead		
-	//Collection<NodeStatus> nearestNodeSet = getAllNearestNeighbours(neighbours, tileVisited); // find nearest neighbours (returns a Collection of NodeStatus object)
-	//for (NodeStatus nearest: nearestNodeSet) {
-	//	if (nearest != null && nearest.getDistanceToTarget() < distance) {
-	//		distance = nearest.getDistanceToTarget();
-	//		nextTile = nearest.getId();
-	//	}
-	
-	//if n has been visited already, remove from the set 
-	// size of the set is the number of nearest neighbours
-	// alternative is come to a fork, set off number of threads as there are number of nearest neighbours
-	
+
 }
