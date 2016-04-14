@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Stack;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import game.ExplorationState;
 import game.NodeStatus;
@@ -62,6 +61,7 @@ public class TempleExplorer {
 			if (neighbourTilesNotVisited != null && neighbourTilesNotVisited.getDistanceToTarget() < distance) {
 			// finds the neighbourTileNotVisited which is closest to the Orb based on the grid
 			// works on grid not graph: could be optimised
+			// Using Dijkstras (method in Cavern.java) gives same bonus score as using Pythagorus
 				distance = neighbourTilesNotVisited.getDistanceToTarget();
 				nextTile = neighbourTilesNotVisited.getId();
 				System.out.println("Moving to tile with id: " + nextTile); 

@@ -82,7 +82,8 @@ public class Node {
     /**
      * Return an unmodifiable set of Edges leaving this Node.
      */
-    public Set<Edge> getExits() {
+    // re-factored this method to getEdges()
+    public Set<Edge> getEdges() {
         return unmodifiableEdges;
     }
 
@@ -101,7 +102,7 @@ public class Node {
     }
 
     /**
-     * Return truee if ob is a Node with the same id as this one.
+     * Return true if ob is a Node with the same id as this one.
      */
     @Override
     public boolean equals(Object ob) {

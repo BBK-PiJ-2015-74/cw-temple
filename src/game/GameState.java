@@ -259,6 +259,8 @@ public class GameState implements ExplorationState, EscapeState {
 
     /**
      * This is the method that was provided with the original code
+     * Modified in the Pythagorus method below
+     * @author PiJ
      */
     private int computeDistanceToTarget(int row, int col) {
         return Math.abs(row - exploreCavern.getTarget().getTile().getRow())
@@ -274,6 +276,20 @@ public class GameState implements ExplorationState, EscapeState {
     private int computeDistanceToTargetPythagorus(int row, int col) {
         return (int) (Math.pow(Math.pow(row - exploreCavern.getTarget().getTile().getRow(),2)
                 + Math.pow(col - exploreCavern.getTarget().getTile().getColumn(),2),0.5));
+    }
+    
+    /**
+     * Find the minimum distance to the Orb (target) in the Explore Cavern based on Dijkstras algorithm
+     * @author lburge01
+     * @param row
+     * @param col
+     * @return distance to target based on Dijkstras algorithm for the shortest path length on a graph
+     * @see {@code getDistanceToTarget()}
+     */
+    private int computeDistanceToTargetDijkstras(int row, int col) {
+    	Node startNode = exploreCavern.getNodeAt(row, col);
+    	int dijkstras = exploreCavern.minPathLengthToTarget(startNode);
+        return  dijkstras;
     }
     
     /**
@@ -305,10 +321,25 @@ public class GameState implements ExplorationState, EscapeState {
         if (stage != Stage.EXPLORE) {
             throw new IllegalStateException("getDistanceToTarget() can only be called while exploring!");
         }
-        return computeDistanceToTargetPythagorus(position.getTile().getRow(), position.getTile().getColumn());
+        return computeDistanceToTargetDijkstras(position.getTile().getRow(), position.getTile().getColumn());
     } 
 
-
+    //Method added here
+    /**
+     * A method to calculate the shortest distance to the exit stairs, based on Dijkstras algorithm
+     * @author lburge01 BBK-PiJ-2015-74
+     * @see Cavern#minPathLengthToTarget(Node start)
+     * @return int the length of the route to the exit 
+     * int minTimeToEscape = escapeCavern.minPathLengthToTarget(position);
+     */
+    public int getDistanceToExit() {
+        if (stage != Stage.ESCAPE) {
+            throw new IllegalStateException("getDistanceToExit() can only be called while escaping!");
+        }
+        Node exit = escapeCavern.getTarget(); // when position = escapeCavern.getTarget() we are at the exit
+        return escapeCavern.minPathLengthToTarget(exit);  
+    } 
+    
     @Override
     public Node getCurrentNode() {
         if (stage != Stage.ESCAPE) {

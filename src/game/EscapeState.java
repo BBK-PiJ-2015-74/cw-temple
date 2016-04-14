@@ -29,6 +29,11 @@ public interface EscapeState {
      * Return all the nodes in the graph, in no particular order.
      */
     public Collection<Node> getVertices();
+    
+//    /**
+//     * Get distance to exit based on the underlying graph
+//     */
+//    public long getDistanceToExit();
 
     /**
      * Change your current location n.

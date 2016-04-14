@@ -414,7 +414,7 @@ public class Cavern {
 
             int nWeight = pathWeights.get(f.getId());
 
-            for (Edge e : f.getExits()) {
+            for (Edge e : f.getEdges()) {
                 Node w = e.getOther(f);
                 int weightThroughN = nWeight + e.length();
                 Integer existingWeight = pathWeights.get(w.getId());
@@ -441,7 +441,7 @@ public class Cavern {
             Tile t = n.getTile();
             String nodeStr = n.getId() + "," + t.getRow() + "," + t.getColumn() + "," + t.getGold() + "," + t.getType().name();
 
-            String edges = n.getExits().stream()
+            String edges = n.getEdges().stream()
                     .map((e) -> e.getOther(n).getId() + "-" + e.length())
                     .collect(Collectors.joining(","));
             nodes.add(nodeStr + "=" + edges);
