@@ -82,7 +82,7 @@ public class Node {
     /**
      * Return an unmodifiable set of Edges leaving this Node.
      */
-    // re-factored this method to getEdges()
+    // re-factored this method to getEdges() - was getExit() which looks like a mistake
     public Set<Edge> getEdges() {
         return unmodifiableEdges;
     }

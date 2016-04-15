@@ -78,6 +78,11 @@ public class Tile {
         return result;
     }
 
+    // added to enable state check
+    public boolean getGoldPickedUp() {
+    	return goldPickedUp;
+    }
+    
     /**
      * An enum representing the different types of Tiles that may appear in a cavern.
      */

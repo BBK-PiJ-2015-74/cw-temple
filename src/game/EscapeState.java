@@ -14,6 +14,11 @@ import java.util.Collection;
  * escape from the cavern and collect gold on the way.
  */
 public interface EscapeState {
+	
+	
+	// added getter method to get hold of a Cavern object
+	public Cavern getEscapeCavern();   
+	
     /**
      * Return your current location in the graph.
      */
@@ -30,14 +35,16 @@ public interface EscapeState {
      */
     public Collection<Node> getVertices();
     
-//    /**
-//     * Get distance to exit based on the underlying graph
-//     */
-//    public long getDistanceToExit();
+    /**
+     * @author BBK-PiJ-2015-74
+     * Get distance to exit based on the underlying graph, using Dijkstra's algorithm
+     * @see#GameState.
+     */
+    public int getDistanceToExit();
 
     /**
      * Change your current location n.
-     * Throw an IllegalArgumentException if n is not a neihgbor of your current location.
+     * Throw an IllegalArgumentException if n is not a neighbour of your current location.
      */
     public void moveTo(Node n);
 

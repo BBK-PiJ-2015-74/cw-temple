@@ -26,7 +26,13 @@ public class GameState implements ExplorationState, EscapeState {
 
     private final Cavern exploreCavern;
     private final Cavern escapeCavern;
-    private final Explorer explorer;
+    
+    // added getter 
+    public Cavern getEscapeCavern() {
+		return escapeCavern;
+	}
+
+	private final Explorer explorer;
     private final Optional<GUI> gui;
     private final long seed;
 
@@ -336,8 +342,7 @@ public class GameState implements ExplorationState, EscapeState {
         if (stage != Stage.ESCAPE) {
             throw new IllegalStateException("getDistanceToExit() can only be called while escaping!");
         }
-        Node exit = escapeCavern.getTarget(); // when position = escapeCavern.getTarget() we are at the exit
-        return escapeCavern.minPathLengthToTarget(exit);  
+        return escapeCavern.minPathLengthToTarget(position); // minPathLengthToTarget uses target = entrance/exit, requires start node to be passed as a parameter
     } 
     
     @Override

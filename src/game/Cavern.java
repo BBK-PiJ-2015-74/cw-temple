@@ -396,7 +396,9 @@ public class Cavern {
      * this cavern (no path).
      * Precondition: {@code start} must be a node in this cavern.
      */
-    int minPathLengthToTarget(Node start) {
+    
+    // made this public 
+    public int minPathLengthToTarget(Node start) {
 
         InternalMinHeap<Node> frontier = new InternalMinHeap<>();
 
