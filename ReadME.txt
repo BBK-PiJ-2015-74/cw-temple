@@ -74,5 +74,15 @@ only gets Lara to the correct row or column, respectively.
 Can delete the addition of distancerows and distancecolumns to the NodeStatus constructor, as this dooesn't add anything.
 
 ***************************************************************************************
+Problematic seed:
+
+Seed : -242848591514604047
+
+This now works
+But running the method multiple times on multiple seeds doesn't reach the exit for some seeds
+Princess Zelda is taking too many steps!
+
+
+
 
 	

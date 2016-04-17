@@ -13,11 +13,14 @@ public class Node {
      * The least positive fresh identifier available
      */
     private static long FRESH_ID = 0;
+    //private static int MAX_DISTANCE = 100000;
 
     /**
      * The unique numerical identifier of this Node
      */
     private final long id;
+    //private final int distance; // field added to get the distance to the exit
+    
     /**
      * Represents the edges outgoing from this Node
      */
@@ -33,7 +36,7 @@ public class Node {
     private final Tile tile;
 
     /* package */ Node(Tile t) {
-        this(FRESH_ID, t);
+        this(FRESH_ID, t); // constructor changed; distance added 
     }
 
     /**
@@ -41,6 +44,7 @@ public class Node {
      */
     /* package */ Node(long givenId, Tile t) {
         id = givenId;
+        //distance = dist; // constructor changed
         FRESH_ID = Math.max(FRESH_ID, givenId + 1);
         edges = new HashSet<>();
         neighbours = new HashSet<>();
@@ -66,6 +70,23 @@ public class Node {
         return id;
     }
 
+    /**
+     * Method added to be able to calculate the shortest path to the exit using Djikstra's algorithm
+     * @return the Node's field distance, an int
+     */
+//    public int getDistance() {
+//    	return distance;
+//    }
+    
+//    //Method added here
+//    /**
+//     * Return a negative number, 0, or a positive number depending on
+//     * whether this is closer to, at the same distance, or farther from the Orb.
+//     */
+//    public int compareTo(Node other) {
+//        return Integer.compare(distance, other.distance);
+//    }
+    
     /**
      * Returns the Edge of this Node that connects to q.
      * .     * Throw an IllegalArgumentException if there is no such edge.
@@ -122,4 +143,5 @@ public class Node {
     public int hashCode() {
         return Objects.hash(id);
     }
+    
 }

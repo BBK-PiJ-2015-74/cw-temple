@@ -26,12 +26,6 @@ public class GameState implements ExplorationState, EscapeState {
 
     private final Cavern exploreCavern;
     private final Cavern escapeCavern;
-    
-    // added getter 
-    public Cavern getEscapeCavern() {
-		return escapeCavern;
-	}
-
 	private final Explorer explorer;
     private final Optional<GUI> gui;
     private final long seed;
@@ -46,8 +40,19 @@ public class GameState implements ExplorationState, EscapeState {
     private boolean exploreErrored = false;
     private boolean escapeErrored = false;
     private int minTimeToExplore;
+    
+    // added getter 
+    public Cavern getEscapeCavern() {
+		return escapeCavern;
+	}
+    
+    // added getter
+    public final long getSeed() {
+		return seed;
+	}
 
-    public GameState(Path exploreCavernPath, Path escapeCavernPath) throws IOException {
+
+	public GameState(Path exploreCavernPath, Path escapeCavernPath) throws IOException {
         exploreCavern = Cavern.deserialize(Files.readAllLines(exploreCavernPath));
         minTimeToExplore = exploreCavern.minPathLengthToTarget(exploreCavern.getEntrance());
         escapeCavern = Cavern.deserialize(Files.readAllLines(escapeCavernPath));
@@ -110,7 +115,7 @@ public class GameState implements ExplorationState, EscapeState {
         } else {
             state = new GameState(useGui);
         }
-        System.out.println("Seed : " + state.seed);
+        System.out.println("Seed : " + state.getSeed());
         state.run();
         return state.getScore();
     }
@@ -286,7 +291,7 @@ public class GameState implements ExplorationState, EscapeState {
     
     /**
      * Find the minimum distance to the Orb (target) in the Explore Cavern based on Dijkstras algorithm
-     * @author lburge01
+     * @author BBK-PiJ-2015-74 lburge01
      * @param row
      * @param col
      * @return distance to target based on Dijkstras algorithm for the shortest path length on a graph
@@ -329,7 +334,7 @@ public class GameState implements ExplorationState, EscapeState {
         }
         return computeDistanceToTargetDijkstras(position.getTile().getRow(), position.getTile().getColumn());
     } 
-
+    
     //Method added here
     /**
      * A method to calculate the shortest distance to the exit stairs, based on Dijkstras algorithm
