@@ -2,8 +2,6 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
-import exploring.TempleExplorer;
-import escaping.TempleEscaper;
 
 public class Explorer {
 

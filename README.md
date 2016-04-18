@@ -16,8 +16,8 @@ Not updating the file location will give an IO fileNotFound exception.
 ****************************************************************
 Package student
 
-@see student.Explorer
-Basic methods written which call methods in package escaping and package exploring
+@see#Explorer
+@see#TempleExplorer
 I implemented two methods for escapeWithGold()
 These are explained below. The first finds the shortest path and roams around neighbouring nodes collecting gold
 The second finds any neighbouring node with the most gold and roams around the grid, before 
@@ -30,10 +30,10 @@ Sometimes using TXT.Main to run 100 seeds randomly reports errors with running o
 via GUI.main they work fine.
 
 ****************************************************************
+Package student
 
-Package exploring
-
-@see exploring.TempleExplorer
+@see#Explorer
+@see#TempleExplorer
 	/**
 	 * A method to claim the Orb.
 	 * This method does the following:
@@ -52,9 +52,9 @@ Package exploring
 	 * If a blind alley is found, retraces steps to a tile at which adjacent there is a tile that has not been visited
 	 */ 
 ********************************************************************
-Package escaping
+Package student
 
-@see escaping.TempleEscaper
+@see#TempleEscaper
 	/**
 	 * method escapeWithGold1() 
 	 * This method calculates the shortest path to the exit, and roams around neighbouring nodes with gold,
@@ -79,7 +79,7 @@ Method escapeWithGold1 gives an average score of approx 6700 over 100 seeds
 	 * I tried to find the node with the most gold (greedyNode) and then head towards it, but can't find a way
 	 * to calculate the path to the node without adding a field to Node which gave the prospect of multiple bugs
 	 * Occasionally using Txt_Main I find seeds where the program tells me I have run out of steps, but
-	 * if I run these from the GUI, it seems this is not the case
+	 * if I run these from the GUI, actually they are fine and the time has not run out.
 	 */
 
 Method escapeWithGold2 gives an average score of approx 13500 over 100 seeds (this is the method called currently)
