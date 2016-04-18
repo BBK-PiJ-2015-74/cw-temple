@@ -3,6 +3,8 @@ package student;
 import game.EscapeState;
 import game.ExplorationState;
 
+// NB Please read the README file in this repo
+
 public class Explorer {
 
     /**
