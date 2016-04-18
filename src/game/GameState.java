@@ -41,12 +41,18 @@ public class GameState implements ExplorationState, EscapeState {
     private boolean escapeErrored = false;
     private int minTimeToExplore;
     
-    // added getter 
+    /**
+     * @author BBK-PiJ-2015-74
+     * added getter to allow use of Dijkstra's algorithm which is implemented in this class
+     */
     public Cavern getEscapeCavern() {
 		return escapeCavern;
 	}
     
-    // added getter
+    /**
+     * @author BBK-PiJ-2015-74
+     * added getter
+     */
     public final long getSeed() {
 		return seed;
 	}
@@ -248,7 +254,8 @@ public class GameState implements ExplorationState, EscapeState {
     /**
      * Returns a collection of NodeStatus objects which contain the unique ID of the node
      * and the distance from that node to the target.
-     * @author lburge01 updated to use computeDistanceToTargetPythagorus
+     * @author BBK-PiJ-2015-74 lburge01 updated to use Pythagorus for the distance to the target, instead of Manhattan distance
+     * This gives similar results to using Dijkstras for the distance to the Orb
      */
     @Override
     public Collection<NodeStatus> getNeighbours() {
@@ -257,29 +264,25 @@ public class GameState implements ExplorationState, EscapeState {
         }
 
         Collection<NodeStatus> options = new ArrayList<>();
-        
-        // NB. Following code block updated to use computeDistanceToTargetPythagorus (int row, int col)
         for (Node n : position.getNeighbours()) {
-            int distance = computeDistanceToTargetPythagorus(n.getTile().getRow(), n.getTile().getColumn());
-            int distancerows = computeDistanceToTarget(n.getTile().getRow(), 0);
-            int distancecolumns = computeDistanceToTarget(0, n.getTile().getColumn());
-            options.add(new NodeStatus(n.getId(), distance, distancerows, distancecolumns));// was n.getId(), distance
+            int distance = computeDistanceToTargetPythagorus(n.getTile().getRow(), n.getTile().getColumn()); // method updated
+            options.add(new NodeStatus(n.getId(), distance));
         }
         return options;
     }
 
     /**
      * This is the method that was provided with the original code
-     * Modified in the Pythagorus method below
      * @author PiJ
      */
-    private int computeDistanceToTarget(int row, int col) {
+    @SuppressWarnings("unused")
+	private int computeDistanceToTarget(int row, int col) {
         return Math.abs(row - exploreCavern.getTarget().getTile().getRow())
                 + Math.abs(col - exploreCavern.getTarget().getTile().getColumn());
     }
   
     /**
-     * @author lburge01
+     * @author BBK-PiJ-2015-74 lburge01
      * @param row
      * @param col
      * @return distance to target based on Pythagorus, rather than a straight addition of rows and columns
@@ -309,7 +312,8 @@ public class GameState implements ExplorationState, EscapeState {
      * @return distance to target based simply on rows - doesn't provide a solution as Lara stops at the nearest row,
      * but then doesn't make it to the Orb
      */
-    private int computeDistanceToTargetRows(int row) {
+    @SuppressWarnings("unused")
+	private int computeDistanceToTargetRows(int row) {
     	return Math.abs(row - exploreCavern.getTarget().getTile().getRow());
     }
     
@@ -319,7 +323,8 @@ public class GameState implements ExplorationState, EscapeState {
      * @return distance to target based simply on columns - doesn't provide a solution as Lara stops at the nearest column,
      * but then doesn't make it to the Orb
      */
-    private int computeDistanceToTargetColumns(int col) {
+    @SuppressWarnings("unused")
+	private int computeDistanceToTargetColumns(int col) {
     	return Math.abs(col - exploreCavern.getTarget().getTile().getColumn());
     }
     
@@ -335,7 +340,6 @@ public class GameState implements ExplorationState, EscapeState {
         return computeDistanceToTargetDijkstras(position.getTile().getRow(), position.getTile().getColumn());
     } 
     
-    //Method added here
     /**
      * A method to calculate the shortest distance to the exit stairs, based on Dijkstras algorithm
      * @author lburge01 BBK-PiJ-2015-74

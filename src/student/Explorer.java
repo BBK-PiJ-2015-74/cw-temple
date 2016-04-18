@@ -65,10 +65,16 @@ public class Explorer {
      * position to the exit, although this will not collect much gold.
      *
      * @param state the information available at the current state
+     * 
+     * @author BBK-PiJ-2015-74
+     * 2 methods can be run for the Escape phase:
+     * Method escapeWithGold1 calculates the shortest path and roams over the neighbour nodes of the shortest path collecting gold
+     * Method escapeWithGold2 finds a greedyNode (the node with the most gold) and 
+     * 
      */
     public void escape(EscapeState state) {
         
     	TempleEscaper princessZelda = new TempleEscaper(state);
-    	princessZelda.escapeWithGold();
+    	princessZelda.escapeWithGold2();
     }
 }

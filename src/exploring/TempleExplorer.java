@@ -34,11 +34,14 @@ public class TempleExplorer {
 	 * This method does the following:
 	 * Finds the neighbours of the current ExplorationState (neighbours)
 	 * Adds the id of the tiles visited to a HashSet;
-	 * Finds the neighbour in the Collection<NodeStatus> neighbours which have not yet been visited;
-	 * Calculates a distance to target, getDistanceToTarget() for the neighbour tile and compares this to a previously recorded distance;
-	 * getDistanceToTarget() is a method in interface ExplorationState, implemented in GameState 
-	 * I have used the implementation of Djikstra's algorithm in Cavern to modify this method
+	 * Finds the neighbour which has not yet been visited;
+	 * Calculates a distance to target, getDistanceToTarget() for the neighbour tile and compares this to previous minimum distance
 	 * Moves to the neighbour tile with a distance to the Orb less than the previously recorded distance, based on Dijkastra's algorithm
+	 * 
+	 * getDistanceToTarget() is a method in interface ExplorationState, implemented in GameState
+	 * I've written methods in GameState to implement this using Djikstra's, Pythagorus or Manhattan distance 
+	 * This implementation uses Djikstra's
+	 * 
 	 * I also tried with the previously recorded distance = Manhattan distance (based on the grid), but this recorded a lower score
 	 * Records the path taken by adding the ids of the tiles visited to a stack;
 	 * If a blind alley is found, retraces steps to a tile at which adjacent there is a tile that has not been visited
@@ -60,16 +63,11 @@ public class TempleExplorer {
 			
 			if (neighbourTilesNotVisited != null && neighbourTilesNotVisited.getDistanceToTarget() < distance) {
 			
-				//getDistanceToTarget() method can use Djikstra's, Pythagorus or Manhattan  
 				distance = neighbourTilesNotVisited.getDistanceToTarget(); 
 				nextTile = neighbourTilesNotVisited.getId();
-			//	System.out.println("Moving to tile with id: " + nextTile); 
-			//	System.out.println("Moving from current position: " + currentState.getCurrentLocation());
 				currentState.moveTo(nextTile); 
 				recordPath();
-			//	System.out.println("\t to new position: " + currentState.getCurrentLocation());
 				pathlength++;
-			//	System.out.println("Number of steps taken is " + pathlength);
 			} else {
 				retraceStep();
 			}	
@@ -118,16 +116,4 @@ public class TempleExplorer {
 		currentState.moveTo(pathStack.peek());	
 		pathlength++;
 	}
-
 }
-
-//private NodeStatus findNeighbourTilesNotVisited(Collection<NodeStatus> neighbours, Set<Long> tileVisited) {
-//NodeStatus tileNotVisited = neighbours.stream()
-//    .sorted(NodeStatus::compareTo) // uses compareTo method in NodeStatus class
-//    .filter(n -> !tileVisited.contains(n.getId()))
-//    .findAny().orElse(null); 
-//if (tileNotVisited == null) {
-//	System.out.println("Blind alley has been found"); // if all neighbour tiles already visited
-//}
-//return tileNotVisited; 
-//}

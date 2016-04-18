@@ -395,9 +395,8 @@ public class Cavern {
      * only the minimum distance between the given node and the target node for
      * this cavern (no path).
      * Precondition: {@code start} must be a node in this cavern.
-     */
-    
-    // made this public 
+     */  
+    // I made this method public to enable it to be used for the Escape phase 
     public int minPathLengthToTarget(Node start) {
 
         InternalMinHeap<Node> frontier = new InternalMinHeap<>();

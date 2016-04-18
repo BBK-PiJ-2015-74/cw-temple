@@ -8,17 +8,13 @@ import java.util.Objects;
 public class NodeStatus implements Comparable<NodeStatus> {
     private final long id;
     private final int distance;
-    private final int distanceRows;
-    private final int distanceColumns;
 
     /**
      * Constructor: an instance with id nodeId and distance dist.
      */
-    /* package */ NodeStatus(long nodeId, int dist, int rows, int columns) {
+    /* package */ NodeStatus(long nodeId, int dist) {
         id = nodeId;
         distance = dist;
-        distanceRows = rows;
-        distanceColumns = columns;
     }
 
     /**
@@ -34,24 +30,6 @@ public class NodeStatus implements Comparable<NodeStatus> {
      */
     public int getDistanceToTarget() {
         return distance;
-    }
-
-    /**
-     * @author lburge01
-     * Return the distance to the orb from the Node that corresponds to
-     * this NodeStatus, based on rows only
-     */
-    public int getDistanceToTargetRows() {
-        return distanceRows;
-    }
-    
-    /**
-     * @author lburge01
-     * Return the distance to the orb from the Node that corresponds to
-     * this NodeStatus, based on columns only
-     */
-    public int getDistanceToTargetColumns() {
-        return distanceColumns;
     }
     
     /**
